@@ -1,18 +1,15 @@
 # This file was generated on 2018-03-04T16:52:14+01:00 from the rspec-dev repo.
 # DO NOT modify it by hand as your changes will get lost the next time it is generated.
 
+dist: trusty
 language: ruby
-sudo: false
 email: false
 cache:
   directories:
     - ../bundle
 before_install:
-  - gem update --system # https://github.com/travis-ci/travis-ci/issues/8978#issuecomment-354036443
+  - "script/update_rubygems_and_install_bundler"
   - unset _JAVA_OPTIONS
-  # Note this doesn't work on JRUBY 2.0.0 mode so we don't do it, the excluded versions are broken on Ruby 2.3
-  - if [ "jruby" != "$TRAVIS_RUBY_VERSION"  ]; then gem install bundler --version "1.11.2"; fi
-  - alias bundle="bundle _1.11.2_"
 bundler_args: "--binstubs --standalone --without documentation --path ../bundle"
 script: "script/run_build"
 rvm:
@@ -21,10 +18,12 @@ rvm:
   - 1.9.3
   - 2.0.0
   - 2.1
-  - 2.2.9
-  - 2.3.6
-  - 2.4.3
-  - 2.5.0
+  - 2.2.10
+  - 2.3.8
+  - 2.4.10
+  - 2.5.8
+  - 2.6.6
+  - 2.7.1
   - ruby-head
   - ree
   - rbx-3
@@ -41,7 +40,6 @@ matrix:
     - rvm: jruby-head
     - rvm: ruby-head
     - rvm: rbx-3
-    - rvm: ruby-2.6.0-preview1
   fast_finish: true
 branches:
   only:

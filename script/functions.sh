@@ -9,7 +9,7 @@ source $SCRIPT_DIR/predicate_functions.sh
 # see http://docs.travis-ci.com/user/ci-environment/
 export JRUBY_OPTS=${JRUBY_OPTS:-"--server -Xcompile.invokedynamic=false"}
 SPECS_HAVE_RUN_FILE=specs.out
-MAINTENANCE_BRANCH=`cat maintenance-branch`
+MAINTENANCE_BRANCH="master" # `cat maintenance-branch`
 
 # Don't allow rubygems to pollute what's loaded. Also, things boot faster
 # without the extra load time of rubygems. Only works on MRI Ruby 1.9+
