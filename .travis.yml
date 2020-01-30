@@ -45,4 +45,5 @@ matrix:
 branches:
   only:
     - master
+    - v3.9.0
     - /^\d+-\d+-maintenance$/
