@@ -57,4 +57,52 @@ commit = "mono-repo-base"
       git commit -m 'Fix merge conflict'
     )
   end
+
+  %x(
+    mkdir script
+    cd #{monorepo_dir}
+    mkdir -p script
+    cp rspec-core/script/functions.sh script
+    cp rspec-core/script/predicate_functions.sh script
+    cp rspec-core/script/travis_functions.sh script
+    cp rspec-core/script/update_rubygems_and_install_bundler script
+    cp rspec-core/.travis.yml .
+    cp rspec-core/maintenance-branch .
+    touch script/clone_all_rspec_repos
+  )
+
+  # create scripts for CI
+  run_build = <<~RUN_BUILD
+    #!/bin/bash
+    set -e
+    function run_build_for {
+      if [ ! -f ./$1/$SPECS_HAVE_RUN_FILE ]; then # don't rerun specs that have already run
+        if [ -d ./$1 ]; then
+          echo "Running specs for $1"
+          pushd ./$1
+          bundle install --binstubs --standalone --without documentation --path ../bundle
+          script/run_build
+          popd
+        else
+          echo ""
+          echo "WARNING: The ./$1 directory does not exist. Usually the"
+          echo "travis build cds into that directory and run the specs to"
+          echo "ensure the specs still pass with your latest changes, but"
+          echo "we are going to skip that step."
+          echo ""
+        fi;
+      fi;
+    }
+    run_build_for "rspec-core"
+    run_build_for "rspec-expectations"
+    run_build_for "rspec-mocks"
+    run_build_for "rspec-support"
+  RUN_BUILD
+  File.write(File.join(monorepo_dir, 'script/run_build'), run_build)
+
+  %x(
+    chmod +x script/run_build
+    git add script .travis.yml maintenance-branch
+    git commit -m 'Add CI scripts'
+  )
 end
