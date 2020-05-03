@@ -44,6 +44,7 @@ commit = "mono-repo-base"
       git remote add #{repo.name} ../#{repo.name}
       git fetch #{repo.name}
       git merge --allow-unrelated-histories --ff #{repo.name}/#{repo.branch}
+      git remote remove #{repo.name}
     )
     # rspec-expectations and rspec-mocks both moved License.txt to LICENSE.md.
     # Resolve this merge conflict by removing License.txt and adding the
